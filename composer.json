@@ -1,0 +1,15 @@
+{
+  "name": "favmel81/RobotsTxt",
+  "description": "Classes for processing robots.txt files",
+  "authors": [
+    {
+      "name": "Alexey Fomenko",
+      "email": "favmel81@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4" : {
+      "RobotsTxt\\" : "."
+    }
+  }
+}
