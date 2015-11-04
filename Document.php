@@ -113,7 +113,7 @@ class Document implements ContainerInterface
         }
     }
 
-    public function hasItem(Item $item)
+    public function hasItem(ChildInterface $item)
     {
         if ($item->isGroup()) {
             return isset($this->groups[$item->getId()]);
