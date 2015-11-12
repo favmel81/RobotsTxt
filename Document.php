@@ -14,6 +14,7 @@ class Document implements ContainerInterface
     protected $itemsMap = array();
     protected $groups = array();
     protected $groupsMap = array();
+    protected $filters = array();
 
 
     public function __construct($content = null)
@@ -72,7 +73,9 @@ class Document implements ContainerInterface
                         if($item->hasComment()) {
                             $content[] = '#'.$item->getComment();
                         }
-                        $content[] = $item->getName().': '.$item->getValue();
+                        $itemName = $item->getName();
+                        $itemValue = $this->filter($itemName, $item->getValue());
+                        $content[] = $itemName .': '.$itemValue;
                     }
                 }
                 $content[] = '';
@@ -89,7 +92,9 @@ class Document implements ContainerInterface
                 if($item->hasComment()) {
                     $content[] = '#'.$item->getComment();
                 }
-                $content[] = $item->getName().': '.$item->getValue();
+                $itemName = $item->getName();
+                $itemValue = $this->filter($itemName, $item->getValue());
+                $content[] = $itemName .': '.$itemValue;
             }
 
 
@@ -298,6 +303,22 @@ class Document implements ContainerInterface
     public function createElement($name, $value)
     {
         return new Element($name, $value, $this);
+    }
+
+    public function addElementFilter($name, $filter = null) {
+        $name = trim(strtolower($name));
+        if($name && is_callable($filter)) {
+            $this->filters[$name] = $filter;
+        }
+        return $this;
+    }
+
+    public function filter($name, $value) {
+        $name = trim(strtolower($name));
+        if(isset($this->filters[$name])) {
+            $value = call_user_func($this->filters[$name], $value);
+        }
+        return $value;
     }
 
     /**
