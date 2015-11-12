@@ -2,7 +2,11 @@
 
 namespace RobotsTxt;
 
-
+/**
+ * processing robots.txt structure
+ * Class Document
+ * @package RobotsTxt
+ */
 class Document implements ContainerInterface
 {
 
@@ -19,12 +23,20 @@ class Document implements ContainerInterface
         }
     }
 
+    /**
+     * load structure from string
+     * @param $content
+     */
     public function loadFromString($content)
     {
         $parser = new Parser();
         $parser->parse($content, $this);
     }
 
+    /**
+     * create resulted plain text
+     * @return string
+     */
     public function render()
     {
         $content = array();
@@ -88,7 +100,11 @@ class Document implements ContainerInterface
     }
 
 
-
+    /**
+     * adding child element
+     * @param ChildInterface $item
+     * @return bool|null
+     */
     public function addItem(ChildInterface $item)
     {
         $itemId   = $item->getId();
@@ -113,6 +129,11 @@ class Document implements ContainerInterface
         }
     }
 
+    /**
+     * checks child existence
+     * @param ChildInterface $item
+     * @return bool
+     */
     public function hasItem(ChildInterface $item)
     {
         if ($item->isGroup()) {
@@ -121,6 +142,10 @@ class Document implements ContainerInterface
         return isset($this->items[$item->getId()]);
     }
 
+    /**
+     * remove child element from this container
+     * @param ChildInterface $item
+     */
     public function removeItem(ChildInterface $item)
     {
         if ($this->hasItem($item)) {
@@ -152,6 +177,12 @@ class Document implements ContainerInterface
         return $this->findGroup(Group::USER_AGENT_GROUP, $userAgent);
     }
 
+    /**
+     * search group with particular name (and value) over children groups
+     * @param string $groupName
+     * @param null   $searchValue
+     * @return array|null
+     */
     protected function findGroup($groupName = Group::USER_AGENT_GROUP, $searchValue = null)
     {
         $groupName = strtolower($groupName);
@@ -194,6 +225,12 @@ class Document implements ContainerInterface
 
     }
 
+    /**
+     * search item with particular name (and value) over children elements
+     * @param      $itemName
+     * @param null $searchValue
+     * @return array|null
+     */
     public function findItem($itemName, $searchValue = null)
     {
         $itemName = strtolower($itemName);
@@ -231,22 +268,44 @@ class Document implements ContainerInterface
         return $items ? $items : null;
     }
 
+    /**
+     * creates User-agent group
+     * @param $userAgent
+     * @return Group
+     */
     public function createUserAgentGroup($userAgent) {
         return $this->createGroup(Group::USER_AGENT_GROUP, $userAgent);
 
     }
 
+    /**
+     * creates group with particular name and value
+     * @param $name
+     * @param $value
+     * @return Group
+     */
     public function createGroup($name, $value)
     {
         return new Group($name, $value, $this);
     }
 
+    /**
+     * creates element with particular name and value
+     * @param $name
+     * @param $value
+     * @return Element
+     */
     public function createElement($name, $value)
     {
         return new Element($name, $value, $this);
     }
 
-
+    /**
+     * case-insensitive analog of the php function  in_array
+     * @param $needle
+     * @param $haystack
+     * @return bool
+     */
     public function inArrayI($needle, &$haystack) {
         return in_array(strtolower($needle), array_map('strtolower', $haystack));
     }

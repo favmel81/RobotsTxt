@@ -2,7 +2,11 @@
 
 namespace RobotsTxt;
 
-
+/**
+ * ordinary it is only User-agent group
+ * Class Group
+ * @package RobotsTxt
+ */
 class Group extends Item implements ChildInterface, ContainerInterface {
 
     const USER_AGENT_GROUP = 'User-agent';
@@ -23,6 +27,10 @@ class Group extends Item implements ChildInterface, ContainerInterface {
     }
 
 
+    /**
+     * makes this group actual for multiple user-agents
+     * @param $value
+     */
     public function addMultipleValue($value) {
         if(!is_array($this->value)) {
             $this->value = array($this->value);
@@ -34,6 +42,9 @@ class Group extends Item implements ChildInterface, ContainerInterface {
 
     }
 
+    /**
+     * removes this group from it`s parent container
+     */
     public function remove() {
         if($this->parent) {
             $this->parent->removeItem($this);
@@ -41,6 +52,11 @@ class Group extends Item implements ChildInterface, ContainerInterface {
         }
     }
 
+    /**
+     * adds child item to this container
+     * @param ChildInterface $item
+     * @param bool           $top
+     */
     public function addItem(ChildInterface $item, $top = false) {
         $itemName = strtolower($item->getName());
         $itemId = $item->getId();
@@ -58,6 +74,10 @@ class Group extends Item implements ChildInterface, ContainerInterface {
         }
     }
 
+    /**
+     * removes child item from this container
+     * @param ChildInterface $item
+     */
     public function removeItem(ChildInterface $item) {
         $itemName = strtolower($item->getName());
         $itemId = $item->getId();
@@ -72,31 +92,62 @@ class Group extends Item implements ChildInterface, ContainerInterface {
         }
     }
 
+    /**
+     * checks children existence
+     * @return bool
+     */
     public function hasItems() {
         return (boolean)sizeof($this->items);
     }
 
+    /**
+     * @return array
+     */
     public function getItems() {
         return $this->items;
     }
 
+    /**
+     * @return array
+     */
     public function getOrderedItemsIds() {
         return $this->itemsOrdered;
     }
 
+    /**
+     * search Host command in this group (with particular value)
+     * @param null $value
+     * @return array|null
+     */
     public function findHostElement($value = null) {
         return $this->findElement(Element::HOST_ELEMENT, $value);
     }
 
+    /**
+     * search Allow command in this group (with particular value)
+     * @param null $value
+     * @return array|null
+     */
     public function findAllowElement($value = null) {
         return $this->findElement(Element::ALLOW_ELEMENT, $value);
     }
 
+    /**
+     * search Disallow command in this group (with particular value)
+     * @param null $value
+     * @return array|null
+     */
     public function findDisallowElement($value = null) {
         return $this->findElement(Element::DISALLOW_ELEMENT, $value);
     }
 
 
+    /**
+     * search commands with particular value
+     * @param      $elementName
+     * @param null $searchValue
+     * @return array|null
+     */
     public function findElement($elementName, $searchValue = null)
     {
         $elementName = strtolower($elementName);
@@ -171,16 +222,34 @@ class Group extends Item implements ChildInterface, ContainerInterface {
         return $elements;
     }
 
+    /**
+     * creates Allow command
+     * @param string $value
+     * @param bool   $top
+     * @return $this
+     */
     public function allow($value = '', $top = false) {
         $this->createElement(Element::ALLOW_ELEMENT, $value, $top);
         return $this;
     }
 
+    /**
+     * creates Disallow command
+     * @param string $value
+     * @param bool   $top
+     * @return $this
+     */
     public function disallow($value = '', $top = false) {
         $this->createElement(Element::DISALLOW_ELEMENT, $value, $top);
         return $this;
     }
 
+    /**
+     * creates Host command
+     * @param string $value
+     * @param bool   $top
+     * @return $this
+     */
     public function host($value = '', $top = false) {
         $this->createElement(Element::HOST_ELEMENT, $value, $top);
         return $this;

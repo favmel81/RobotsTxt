@@ -3,6 +3,11 @@
 namespace RobotsTxt;
 
 
+/**
+ * child item class of group or document
+ * Class Element
+ * @package RobotsTxt
+ */
 class Element extends Item implements ChildInterface{
 
     const ALLOW_ELEMENT = 'Allow';
@@ -22,16 +27,14 @@ class Element extends Item implements ChildInterface{
     }
 
 
-
+    /**
+     * removes this element from it`s parent container
+     */
     public function remove() {
         if($this->parent) {
             $this->parent->removeItem($this);
             $this->parent = null;
         }
     }
-    public function getValue() {
-        return $this->value;
-    }
-
 
 } 
