@@ -217,7 +217,7 @@ class Document implements ContainerInterface
             $group = $this->groups[$id];
             $value = $group->getValue();
 
-            if ((!is_array($value) && strtolower($value) == $searchValue) || (is_array($value) && $this->inArrayI(
+            if ((!is_array($value) && strtolower($value) == $searchValue) || (is_array($value) && self::inArrayI(
                         $searchValue,
                         $value
                     ))
@@ -258,12 +258,14 @@ class Document implements ContainerInterface
          * search by value
          */
 
+        $searchValue = ltrim(strtolower($searchValue), '/');
+
         foreach ($this->itemsMap[$itemName] as $id) {
             /**
              * @var $item Item
              */
             $item  = $this->items[$id];
-            $value = $item->getValue();
+            $value = ltrim(strtolower($item->getValue()), '/');
 
             if ($value === $searchValue) {
                 $items[] = $value;
@@ -327,7 +329,7 @@ class Document implements ContainerInterface
      * @param $haystack
      * @return bool
      */
-    public function inArrayI($needle, &$haystack) {
+    public static function inArrayI($needle, &$haystack) {
         return in_array(strtolower($needle), array_map('strtolower', $haystack));
     }
 } 

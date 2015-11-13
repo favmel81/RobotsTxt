@@ -164,7 +164,7 @@ class Group extends Item implements ChildInterface, ContainerInterface {
             return $elements;
         }
 
-        $searchValue = strtolower($searchValue);
+        $searchValue = ltrim(strtolower($searchValue), '/');
 
         /**
          * search by value
@@ -175,9 +175,9 @@ class Group extends Item implements ChildInterface, ContainerInterface {
              * @var $element Item
              */
             $element = $this->items[$id];
-            $value = $element->getValue();
+            $value = ltrim(strtolower($element->getValue()), '/');
 
-            if ((!is_array($value) && strtolower($value) == $searchValue) || (is_array($value) && $this->inArrayI(
+            if ((!is_array($value) && $value == $searchValue) || (is_array($value) && Document::inArrayI(
                         $searchValue,
                         $value
                     ))
@@ -192,13 +192,14 @@ class Group extends Item implements ChildInterface, ContainerInterface {
 
     public function findElementByValue($searchValue) {
         $elements = array();
-        $searchValue = strtolower($searchValue);
+        $searchValue = ltrim(strtolower($searchValue), '/');
         if($this->hasItems()) {
             foreach($this->items as $element) {
                 /**
                  * $var $element Item
                  */
-                if(strtolower($element->getValue()) == $searchValue) {
+                $value = ltrim(strtolower($element->getValue()), '/');
+                if( $value === $searchValue) {
                     $elements[] = $element;
                 }
             }
