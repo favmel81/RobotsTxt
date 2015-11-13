@@ -1,6 +1,6 @@
 <?php
 
-namespace RobotsTxt\RobotsTxt;
+namespace RobotsTxt;
 
 
 interface ChildInterface
