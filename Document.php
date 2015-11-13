@@ -74,7 +74,7 @@ class Document implements ContainerInterface
                             $content[] = '#'.$item->getComment();
                         }
                         $itemName = $item->getName();
-                        $itemValue = $this->filter($itemName, $item->getValue());
+                        $itemValue = $this->filter($itemName, $item->getValue(), $group);
                         $content[] = $itemName .': '.$itemValue;
                     }
                 }
@@ -315,10 +315,10 @@ class Document implements ContainerInterface
         return $this;
     }
 
-    public function filter($name, $value) {
+    public function filter($name, $value, Group $group = null) {
         $name = trim(strtolower($name));
         if(isset($this->filters[$name])) {
-            $value = call_user_func($this->filters[$name], $value);
+            $value = call_user_func($this->filters[$name], $value, $group);
         }
         return $value;
     }
